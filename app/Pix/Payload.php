@@ -137,6 +137,39 @@ class Payload {
 
     return $this->getValue(self::ID_MERCHANT_ACCOUNT_INFORMATION, $gui.$key.$description);
   }
+
+  /**
+   * Method that return full additional field value (TXTID)
+   * @return string 
+  */
+  private function getAdditionDataFieldTemplate() {
+    // txtid
+    $txtid = $this->getValue(self::ID_ADDITIONAL_DATA_FIELD_TEMPLATE_TXTID, $this->txtId);
+
+    return $this->getValue(self::ID_ADDITIONAL_DATA_FIELD_TEMPLATE, $txtid);
+  }
+
+  private function getCRC16($payload) {
+    // Add main payload data
+    $payload .= self::ID_CRC16. '04';
+
+    // Bacen default data
+    $polinomius = 0x1021;
+    $result = 0xFFFF;
+
+    // Checksum
+    if ($length = strlen($payload) > 0) {
+      for ($offset = 0; $offset < $length; $offset++) {
+        $result ^= (ord($payload[$offset]) << 8);
+        for ($bitwise = 0; $bitwise < 8; $bitwise++) {
+          if (($result <<= 1) & 0x10000) $result ^= $polinomius;
+          $result &= 0xFFFF;
+        }
+      }
+    }
+
+    return self::ID_CRC16. '04'.strtoupper(dechex($result));
+  }
   
   /**
    * Method that generate pix code
@@ -151,8 +184,10 @@ class Payload {
                $this->getValue(self::ID_TRANSACTION_AMOUNT, $this->amount).
                $this->getValue(self::ID_COUNTRY_CODE, 'BR').
                $this->getValue(self::ID_MERCHANT_NAME, $this->merchantName).
-               $this->getValue(self::ID_MERCHANT_CITY, $this->merchantCity);
+               $this->getValue(self::ID_MERCHANT_CITY, $this->merchantCity).
+               $this->getAdditionDataFieldTemplate();
     
-    return $payload;
+    // Return payload + CRC16
+    return $payload.$this->getCRC16($payload);
   }
 }
