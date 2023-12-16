@@ -137,6 +137,17 @@ class Payload {
 
     return $this->getValue(self::ID_MERCHANT_ACCOUNT_INFORMATION, $gui.$key.$description);
   }
+
+  /**
+   * Method that return full additional field value (TXTID)
+   * @return string 
+  */
+  private function getAdditionDataFieldTemplate() {
+    // txtid
+    $txtid = $this->getValue(self::ID_ADDITIONAL_DATA_FIELD_TEMPLATE_TXTID, $this->txtId);
+
+    return $this->getValue(self::ID_ADDITIONAL_DATA_FIELD_TEMPLATE, $txtid);
+  }
   
   /**
    * Method that generate pix code
@@ -151,7 +162,8 @@ class Payload {
                $this->getValue(self::ID_TRANSACTION_AMOUNT, $this->amount).
                $this->getValue(self::ID_COUNTRY_CODE, 'BR').
                $this->getValue(self::ID_MERCHANT_NAME, $this->merchantName).
-               $this->getValue(self::ID_MERCHANT_CITY, $this->merchantCity);
+               $this->getValue(self::ID_MERCHANT_CITY, $this->merchantCity).
+               $this->getAdditionDataFieldTemplate();
     
     return $payload;
   }
