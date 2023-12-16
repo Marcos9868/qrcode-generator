@@ -22,14 +22,20 @@ $obQrCode = new QrCode($payloadQrCode);
 
 // QR Code Image
 $qrCodeImage = (new Output\Png)->output($obQrCode, 400);
+?>
 
-// Output as data URI
-$base64Image = base64_encode($qrCodeImage);
-
-// Output as data URI
-echo '<img src="data:image/png;base64,' . $base64Image . '" alt="QR Code">';
-
-echo "<pre>";
-print_r($objPayload);
-print_r($payloadQrCode);
-echo "<pre>"; exit;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/global.css">
+  <title>Static QR Code</title>
+</head>
+<body>
+  <img src="data:image/png;base64, <?=base64_encode($qrCodeImage) ?>" alt="QR Code">
+  <br><br>
+  Pix Code:<br>
+  <strong><?=$payloadQrCode ?></strong>
+</body>
+</html>
