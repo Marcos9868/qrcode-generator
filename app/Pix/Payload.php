@@ -145,7 +145,13 @@ class Payload {
   public function getPayload() {
     // Creates payload
     $payload = $this->getValue(self::ID_PAYLOAD_FORMAT_INDICATOR, '01').
-               $this->getMerchantAccountInformation();
+               $this->getMerchantAccountInformation().
+               $this->getValue(self::ID_MERCHANT_CATEGORY_CODE, '0000').
+               $this->getValue(self::ID_TRANSACTION_CURRENCY, '986').
+               $this->getValue(self::ID_TRANSACTION_AMOUNT, $this->amount).
+               $this->getValue(self::ID_COUNTRY_CODE, 'BR').
+               $this->getValue(self::ID_MERCHANT_NAME, $this->merchantName).
+               $this->getValue(self::ID_MERCHANT_CITY, $this->merchantCity);
     
     return $payload;
   }
