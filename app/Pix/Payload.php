@@ -104,10 +104,10 @@ class Payload {
 
   /**
    * Method that set amount value
-   * @param string $amount
+   * @param float $amount
   */
   public function setAmount($amount) {
-    $this->amount = $amount;
+    $this->amount = (string)number_format($amount, 2, '.', '');
     return $this;
   }
 }
