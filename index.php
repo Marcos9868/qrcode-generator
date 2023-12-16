@@ -13,5 +13,6 @@ $objPayload = (new Payload)->setPixKey('12345678900')
 
 $payloadQrCode = $objPayload->getPayload();
 echo "<pre>";
+print_r($objPayload);
 print_r($payloadQrCode);
 echo "<pre>"; exit;
